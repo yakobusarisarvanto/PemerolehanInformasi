@@ -8,6 +8,7 @@ package view;
 import java.io.*;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import model.*;
 
 /**
@@ -208,7 +209,7 @@ public class MainForm extends javax.swing.JFrame {
             doc.setContent(textContent.getText());
             doc.setRealContent(textContent.getText());
             index.addNewDocument(doc);
-            textIdDoc.setText(String.valueOf(Integer.parseInt(textIdDoc.getText())+1));
+            textIdDoc.setText(String.valueOf(Integer.parseInt(textIdDoc.getText()) + 1));
             textJudul.setText("");
             textContent.setText("");
         } catch (NumberFormatException e) {
@@ -222,16 +223,16 @@ public class MainForm extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             // baca directory
             File file = fileChooser.getSelectedFile();
-                // buat document baru
-                Document doc = new Document();
-                // baca isi file
-                // Isi file disimpan di atribut content dari objeck document
-                // variabel i merupakan idDocument;
-                doc.readFile(Integer.parseInt(textIdDoc.getText()), file);
-                doc.IndonesiaStemming();
-                // masukkan file isi directory ke list of document pada obye index
-                getIndex().addNewDocument(doc);
-            textIdDoc.setText(String.valueOf(Integer.parseInt(textIdDoc.getText())+ 1));
+            // buat document baru
+            Document doc = new Document();
+            // baca isi file
+            // Isi file disimpan di atribut content dari objeck document
+            // variabel i merupakan idDocument;
+            doc.readFile(Integer.parseInt(textIdDoc.getText()), file);
+            doc.IndonesiaStemming();
+            // masukkan file isi directory ke list of document pada obye index
+            getIndex().addNewDocument(doc);
+            textIdDoc.setText(String.valueOf(Integer.parseInt(textIdDoc.getText()) + 1));
         }
         index.makeDictionaryWithTermNumber();
     }//GEN-LAST:event_tombolAddDokumenActionPerformed
@@ -253,17 +254,22 @@ public class MainForm extends javax.swing.JFrame {
                 // Isi file disimpan di atribut content dari objeck document
                 // variabel i merupakan idDocument;
                 File file = files[i];
-                doc.readFile(Integer.parseInt(textIdDoc.getText())+i, file);
+                doc.readFile(Integer.parseInt(textIdDoc.getText()) + i, file);
                 doc.IndonesiaStemming();
                 // masukkan file isi directory ke list of document pada obye index
                 getIndex().addNewDocument(doc);
             }
-            textIdDoc.setText(String.valueOf(Integer.parseInt(textIdDoc.getText())+ files.length));
+            textIdDoc.setText(String.valueOf(Integer.parseInt(textIdDoc.getText()) + files.length));
         }
         index.makeDictionaryWithTermNumber();
     }//GEN-LAST:event_tombolAddDirectoryActionPerformed
 
     private void tombolSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolSearchActionPerformed
+        for (int i = 0; i < Tabel.getRowCount(); i++) {
+            Tabel.setValueAt("", i, 0);
+            Tabel.setValueAt("", i, 1);
+            Tabel.setValueAt("", i, 2);
+        }
         String query = textQuery.getText();
         ArrayList<SearchingResult> hasilCari = index.searchCosineSimilarity(query);
         for (int i = 0; i < hasilCari.size(); i++) {
