@@ -545,10 +545,12 @@ public class InvertedIndex {
      * @return
      */
     public ArrayList<SearchingResult> searchCosineSimilarity(String query) {
+        Document querySteaming = new Document(query);
+        querySteaming.IndonesiaStemming();
         // buat list search dokumen
         ArrayList<SearchingResult> result = new ArrayList<SearchingResult>();
         // ubah query menjadi array list posting
-        ArrayList<Posting> queryPostingList = getQueryPosting(query);
+        ArrayList<Posting> queryPostingList = getQueryPosting(querySteaming.getContent());
         // buat posting list untuk seluruh dokumen
         for (int i = 0; i < listOfDocument.size(); i++) {
             // ambil obyek dokumen
