@@ -323,11 +323,20 @@ public class MainForm extends javax.swing.JFrame {
             Tabel.setValueAt("", i, 2);
         }
         String query = textQuery.getText();
-        ArrayList<SearchingResult> hasilCari = index.searchCosineSimilarity(query);
-        for (int i = 0; i < hasilCari.size(); i++) {
-            Tabel.setValueAt(hasilCari.get(i).getDocument().getId(), i, 0);
-            Tabel.setValueAt(hasilCari.get(i).getDocument().getJudul(), i, 1);
-            Tabel.setValueAt(hasilCari.get(i).getSimilarity(), i, 2);
+        Document doc = new Document(query);
+        doc.IndonesiaStemming();
+        ArrayList<Posting> queryPostingList = getIndex().getQueryPosting(doc.getContent());
+        ArrayList<Document> listDoc = getIndex().getListOfDocument();
+        int baris = 0;
+        for (int i = 0; i < listDoc.size(); i++) {
+            ArrayList<Posting> tempDocWeight = getIndex().makeTFIDF(listDoc.get(i).getId());
+            double cosinSimilarity = getIndex().getCosineSimilarity(queryPostingList, tempDocWeight);
+            if (cosinSimilarity > 0) {
+                Tabel.setValueAt(listDoc.get(i).getId(), baris, 0);
+                Tabel.setValueAt(listDoc.get(i).getJudul(), baris, 1);
+                Tabel.setValueAt(cosinSimilarity, baris, 2);
+                baris++;
+            }
         }
     }//GEN-LAST:event_tombolSearchActionPerformed
 
